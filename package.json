@@ -2,25 +2,97 @@
   "name": "superestreladofutebol",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=24"
+  },
+  "imports": {
+    "#*": "./src/*"
+  },
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run services:up && npm run services:wait:database && npm run db:push && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "services:up": "podman compose -f infra/compose.yaml up -d",
+    "services:down": "podman compose -f infra/compose.yaml down",
+    "services:stop": "podman compose -f infra/compose.yaml stop",
+    "services:wait:database": "node infra/scripts/wait_for_postgres.js",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "lint:spell:check": "cspell \"**\"",
+    "lint:prettier:check": "prettier --check .",
+    "lint:prettier:fix": "prettier --write .",
+    "lint:eslint:check": "eslint .",
+    "lint:security:lockfile": "lockfile-lint --path package-lock.json --allowed-hosts npm --validate-https",
+    "lint:security:secrets": "secretlint \"**/*\"",
+    "prepare": "husky",
+    "commit": "czg"
   },
   "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "hono": "^4.12.23",
     "next": "16.2.6",
+    "postgres": "^3.4.9",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.1",
+    "@eslint/css": "^1.3.0",
+    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/js": "^10.0.1",
+    "@eslint/json": "^2.0.0",
+    "@eslint/markdown": "^8.0.2",
+    "@faker-js/faker": "^10.4.0",
+    "@microsoft/eslint-plugin-sdl": "^1.1.0",
+    "@secretlint/secretlint-rule-preset-recommend": "^13.0.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.6",
+    "@vitejs/plugin-react": "^6.0.2",
+    "cspell": "^10.0.0",
+    "cz-git": "^1.13.1",
+    "czg": "^1.13.1",
+    "drizzle-kit": "^0.31.10",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.6",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-security": "^4.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.5",
+    "lockfile-lint": "^5.0.0",
+    "prettier": "^3.8.3",
+    "secretlint": "^13.0.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.22.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.7"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-git"
+    }
+  },
+  "lint-staged": {
+    "package-lock.json": [
+      "npm run lint:security:lockfile"
+    ],
+    "*.{js,ts,jsx,tsx}": [
+      "eslint",
+      "prettier --check",
+      "cspell --no-must-find-files"
+    ],
+    "*.{js,ts,jsx,tsx,json,md,env,yaml,yml}": [
+      "secretlint"
+    ],
+    "*.{json,md}": [
+      "prettier --check",
+      "cspell --no-must-find-files"
+    ]
   }
 }
