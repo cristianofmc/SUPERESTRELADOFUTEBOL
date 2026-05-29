@@ -1,0 +1,107 @@
+name: Linting
+
+on: pull_request
+
+jobs:
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: "package.json"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run lint prettier
+        run: npm run lint:prettier:check
+
+  eslint:
+    name: Eslint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: "package.json"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run lint eslint
+        run: npm run lint:eslint:check
+
+  spellcheck:
+    name: CSpell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: "package.json"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run spellcheck
+        run: npm run lint:spell:check
+
+  commitlint:
+    name: commitlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: "package.json"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run commitlint
+        run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+
+  lockfile-lint:
+    name: Lockfile Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: "package.json"
+      - name: Install dependencies
+        run: npm ci
+      - name: Check for package-lock injection
+        run: npm run lint:security:lockfile
+
+  secretlint:
+    name: Secretlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: "package.json"
+      - name: Install dependencies
+        run: npm ci
+      - name: Check for exposed secrets
+        run: npm run lint:security:secrets
+
+  npm-audit:
+    name: NPM Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: "package.json"
+      - name: Install dependencies
+        run: npm ci
+      - name: Check for high vulnerabilities
+        run: npm run lint:security:audit
+
+  semgrep:
+    name: Semgrep SAST
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Run Semgrep Security Scan
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: auto
