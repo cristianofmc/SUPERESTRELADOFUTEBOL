@@ -17,7 +17,7 @@
     "services:up": "podman compose -f infra/compose.yaml up -d",
     "services:down": "podman compose -f infra/compose.yaml down",
     "services:stop": "podman compose -f infra/compose.yaml stop",
-    "services:wait:database": "node infra/scripts/wait_for_postgres.js",
+    "services:wait:database": "tsx infra/scripts/wait_for_postgres.ts",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
