@@ -1,5 +1,9 @@
+commitlint
+datname
 Estrela
 Futebol
 isready
 mailcatcher
+Semgrep
 superestreladofutebol
+vitest

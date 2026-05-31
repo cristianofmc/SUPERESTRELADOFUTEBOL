@@ -1,7 +1,13 @@
 {
   "version": "0.2",
   "language": "en",
-  "ignorePaths": ["node_modules", "dist", "build", "package-lock.json"],
+  "ignorePaths": [
+    "node_modules",
+    "dist",
+    "build",
+    "package-lock.json",
+    "src/infra/migrations/meta/"
+  ],
   "dictionaries": ["custom-dictionary"],
   "dictionaryDefinitions": [
     {
