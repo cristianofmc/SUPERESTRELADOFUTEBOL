@@ -1,8 +1,10 @@
+casejimmyfivecase
 commitlint
 datname
 Estrela
 Futebol
 isready
+jimmyfive
 mailcatcher
 Semgrep
 superestreladofutebol

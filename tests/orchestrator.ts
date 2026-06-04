@@ -44,6 +44,9 @@ async function request(
 }
 
 async function waitForAllServices() {
+  console.log("APP_URL:", process.env.APP_URL);
+  console.log("EMAIL_HTTP_HOST:", process.env.EMAIL_HTTP_HOST);
+  console.log("EMAIL_HTTP_PORT:", process.env.EMAIL_HTTP_PORT);
   const results = await Promise.allSettled([
     waitForWebServer(),
     waitForEmailServer(),

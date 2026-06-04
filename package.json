@@ -11,9 +11,9 @@
   "scripts": {
     "dev": "npm run services:up && npm run services:wait:database && npm run migrations:up && next dev",
     "postdev": "npm run services:stop",
-    "test": "npm run services:up && concurrently -n next,vitest --hide next -k -s command-vitest \"next dev\" \"vitest run\"",
+    "test": "npm run services:up && concurrently -n next,vitest -k -s command-vitest \"next dev\" \"vitest run --reporter=verbose\"",
     "posttest": "npm run services:stop",
-    "test:watch": "vitest",
+    "test:watch": "vitest --reporter=verbose",
     "services:up": "podman compose --env-file .env.development -f src/infra/compose.yaml up -d",
     "services:down": "podman compose -f src/infra/compose.yaml down",
     "services:stop": "podman compose -f src/infra/compose.yaml stop",
@@ -42,6 +42,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "set-cookie-parser": "^3.1.0",
+    "uuid": "^14.0.0",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
@@ -61,7 +62,9 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/set-cookie-parser": "^2.4.10",
+    "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^6.0.2",
+    "concurrently": "^10.0.3",
     "cspell": "^10.0.0",
     "cz-git": "^1.13.1",
     "czg": "^1.13.1",
