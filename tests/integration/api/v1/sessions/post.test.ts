@@ -4,6 +4,7 @@ import setCookieParsers from "set-cookie-parser";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
+  await orchestrator.runPendingMigrations();
 });
 
 describe("POST /api/v1/sessions", () => {

@@ -4,6 +4,7 @@ import setCookieParsers from "set-cookie-parser";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
+  await orchestrator.runPendingMigrations();
 });
 
 describe("GET /api/v1/user", () => {

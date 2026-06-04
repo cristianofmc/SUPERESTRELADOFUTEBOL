@@ -94,6 +94,7 @@ async function fetchEmailPage() {
 
 async function cleanDatabase() {
   await db.execute(sql`drop schema public cascade; create schema public;`);
+  await db.execute(sql`drop schema if exists drizzle cascade;`);
 }
 
 async function runPendingMigrations() {

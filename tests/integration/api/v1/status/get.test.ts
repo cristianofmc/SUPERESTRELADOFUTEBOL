@@ -3,6 +3,7 @@ import session from "#models/session";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
+  await orchestrator.runPendingMigrations();
 });
 
 describe("GET /api/v1/status", () => {

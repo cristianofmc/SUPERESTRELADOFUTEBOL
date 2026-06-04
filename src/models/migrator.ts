@@ -9,18 +9,30 @@ const migrationsFolder = path.join(process.cwd(), "src", "infra", "migrations");
 export async function listPendingMigrations() {
   const allMigrations = readMigrationFiles({ migrationsFolder });
 
-  const appliedResult = await db.execute(
-    sql`SELECT hash FROM __drizzle_migrations ORDER BY created_at`,
-  );
-
-  const appliedHashes = new Set(appliedResult.map((row) => row.hash as string));
-
-  return allMigrations.filter((m) => !appliedHashes.has(m.hash));
+  try {
+    const appliedResult = await db.execute(
+      sql`SELECT hash FROM drizzle.__drizzle_migrations ORDER BY created_at`,
+    );
+    const appliedHashes = new Set(
+      appliedResult.map((row) => row.hash as string),
+    );
+    return allMigrations.filter((m) => !appliedHashes.has(m.hash));
+  } catch {
+    // __drizzle_migrations does not exist yet — all migrations are pending
+    return allMigrations;
+  }
 }
 
 export async function runPendingMigrations() {
+  const pending = await listPendingMigrations();
+
+  if (pending.length === 0) {
+    return [];
+  }
+
   await migrate(db, { migrationsFolder });
-  return { success: true };
+
+  return pending;
 }
 
 const migrator = {
