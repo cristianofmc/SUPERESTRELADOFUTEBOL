@@ -8,4 +8,5 @@ jimmyfive
 mailcatcher
 Semgrep
 superestreladofutebol
+vercel
 vitest

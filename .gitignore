@@ -46,3 +46,6 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 *.pem
+
+# drizzle
+src/infra/migrations/meta/
